@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+.navigation {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.navigation a {
+  margin-right: 12px;
+}
+
+.active {
+  text-decoration: underline;
+}
