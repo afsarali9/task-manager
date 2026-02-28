@@ -15,10 +15,15 @@ const Login = () => {
     const { name, value } = e.target
     setInputs(prev => ({ ...prev, [name]: value }))
   }
+  const userToStore = {
+    name: inputs.name,
+    email: inputs.email
+  }
   const handleLogin = (e) => {
     e.preventDefault()
     if (inputs.name === '' || inputs.email === '' || inputs.password === '') return
     dispatch(login(inputs))
+    localStorage.setItem("user", JSON.stringify(userToStore))
     setInputs({
       name: '',
       email: '',

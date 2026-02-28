@@ -7,15 +7,20 @@ import Tasks from "../pages/Tasks";
 import { PublicLayout } from "../layouts/PublicLayout";
 import Login from "../pages/Login";
 import ProtectedLayout from "../layouts/ProtectedLayout";
+import PublicOnlyLayout from "../layouts/PublicOnlyLayout";
 
 export const router = createBrowserRouter([
   // Public routes
   {
-    path: '/',
-    element: <PublicLayout />,
+    element: <PublicOnlyLayout />,
     children: [
-      { index: true, element: <Login /> },
-      { path: 'login', element: <Login /> },
+      {
+        element: <PublicLayout />,
+        children: [
+          { index: true, element: <Login /> },
+          { path: "login", element: <Login /> }
+        ]
+      }
     ]
   },
 
