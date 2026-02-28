@@ -28,14 +28,15 @@ const Tasks = () => {
       tempFlag(setRepeat)
       setInput('')
       return
-    } else {
-      tempFlag(setSuccess)
     }
 
     dispatch(addTask(trim))
     setInput('')
     setRepeat(false)
+    tempFlag(setSuccess)
   }
+
+
 
   let placeholder = "Enter Task"
   if (empty) placeholder = "Task cannot be empty"

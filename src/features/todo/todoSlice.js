@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const savedTasks = JSON.parse(localStorage.getItem("tasks"))
+const initialState = savedTasks || []
+
 export const todoSlice = createSlice({
   name: 'todo',
-  initialState: [],
+  initialState,
   reducers: {
     addTask: (state, action) => [...state, { id: Date.now(), task: action.payload, complete: false }],
 
@@ -11,7 +14,7 @@ export const todoSlice = createSlice({
     removeTask: (state, action) => {
       const task = state.find(item => item.id === action.payload)
       if (task?.complete) {
-        return
+        return state
       }
       return state.filter(item => item.id !== action.payload)
     }
