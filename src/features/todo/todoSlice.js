@@ -11,6 +11,15 @@ export const todoSlice = createSlice({
 
     isComplete: (state, action) => state.map(item => item.id === action.payload ? { ...item, complete: !item.complete } : item),
 
+    editTask: (state, action) => {
+      const { id, task } = action.payload
+      return state.map(todo =>
+        todo.id === id
+          ? { ...todo, task }
+          : todo
+      )
+    },
+
     removeTask: (state, action) => {
       const task = state.find(item => item.id === action.payload)
       if (task?.complete) {
@@ -21,5 +30,5 @@ export const todoSlice = createSlice({
   }
 })
 
-export const { addTask, isComplete, removeTask } = todoSlice.actions
+export const { addTask, isComplete, removeTask, editTask } = todoSlice.actions
 export default todoSlice.reducer 
