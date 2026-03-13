@@ -1,8 +1,12 @@
+import { lazy, Suspense, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { isComplete, removeTask, editTask } from "../features/todo/todoSlice"
-import Card from "../components/Card"
-import { useEffect, useState } from "react"
-import Modal from "../components/Modal"
+// import Card from "../components/Card"
+// import Modal from "../components/Modal"
+
+const Modal = lazy(() => import("../components/Modal"))
+
+const Card = lazy(() => import("../components/Card"))
 
 const ITEMS_PER_PAGE = 6
 
@@ -63,15 +67,17 @@ const Dashboard = () => {
   return (
     <>
       {
-        isModal && selectedTodo && <Modal
-          modal={setIsModal}
-          todo={selectedTodo}
-          onUpdate={(newValue) => {
-            dispatch(editTask({ id: selectedTodo.id, task: newValue }))
-            setIsModal(false)
-            setSelectedTodo(null)
-          }}
-        />
+        isModal && selectedTodo && <Suspense fallback={<p>Loading modal...</p>}>
+          <Modal
+            modal={setIsModal}
+            todo={selectedTodo}
+            onUpdate={(newValue) => {
+              dispatch(editTask({ id: selectedTodo.id, task: newValue }))
+              setIsModal(false)
+              setSelectedTodo(null)
+            }}
+          />
+        </Suspense>
       }
 
       <div className="w-[90%] m-auto mt-5">
@@ -97,21 +103,24 @@ const Dashboard = () => {
         </div>
 
         {/* tasks */}
-        {paginatedTodos.length > 0 ? (
-          paginatedTodos.map(todo => (
-            <Card
-              key={todo.id}
-              task={todo.task}
-              complete={todo.complete}
-              onToggle={() => dispatch(isComplete(todo.id))}
-              onDelete={() => handleDelete(todo)}
-              openModal={() => openModal(todo)}
-            />
-          ))
-        ) : (
-          <p>No Task There</p>
-        )}
+        <Suspense fallback={<p>Loading...</p>}>
+          {paginatedTodos.length > 0 ? (
+            paginatedTodos.map(todo => (
 
+              <Card
+                key={todo.id}
+                task={todo.task}
+                complete={todo.complete}
+                onToggle={() => dispatch(isComplete(todo.id))}
+                onDelete={() => handleDelete(todo)}
+                openModal={() => openModal(todo)}
+              />
+
+            ))
+          ) : (
+            <p>No Task There</p>
+          )}
+        </Suspense>
         {/* pagination */}
         {totalPages > 1 && (
           <div className="flex gap-2 justify-center mt-4">

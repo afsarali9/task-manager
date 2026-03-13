@@ -1,7 +1,9 @@
-import { useState } from "react"
-import Button from "../components/Button"
+import { lazy, Suspense, useState } from "react"
+// import Button from "../components/Button"
 import { addTask } from "../features/todo/todoSlice"
 import { useDispatch, useSelector } from 'react-redux'
+
+const Button = lazy(() => import("../components/Button"))
 
 const Tasks = () => {
   const [input, setInput] = useState('')
@@ -57,7 +59,9 @@ const Tasks = () => {
         />
       </div>
       <div className="w-[33%] bg-blue-950 text-white cursor-pointer flex items-center justify-items-center">
-        <Button name='Add Task' onClick={handleAdd} />
+        <Suspense fallback={<p>Button Loading</p>}>
+          <Button name='Add Task' onClick={handleAdd} />
+        </Suspense>
       </div>
 
     </div>
